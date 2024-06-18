@@ -59,7 +59,7 @@ def save_yolo_annotations(yolo_annotations, class_mapping, output_file):
                 f.write(f"{class_id} {' '.join(map(str, bbox))}\n")
 
 # Set up paths and load data
-data_root_dir = "../Japan_filtered"
+data_root_dir = "../data-collection/Japan_filtered/filtered"
 
 source_image_path = os.path.join(data_root_dir, "images")
 source_annot_path = os.path.join(data_root_dir, "annotations") 
