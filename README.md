@@ -28,33 +28,6 @@
 
 
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <!-- <li><a href="#license">License</a></li> -->
-    <li><a href="#authorizers">Authorizers</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -73,6 +46,7 @@ The goal of this project is to develop and implement a <b>real-time road damage 
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
 ![Azure](https://img.shields.io/badge/azure-%230072C6.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)
 ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
 
@@ -84,21 +58,26 @@ The goal of this project is to develop and implement a <b>real-time road damage 
 ## Getting Started
 
 ```py
-# Something would show up in the sooner future...
+git clone https://github.com/hyoon1/RoadSense.git
+cd RoadSense
 ```
 
 ### Prerequisites
 
-```py
-# Something would show up in the sooner future...
-```
+- Python 3.9
+- tensorflow 2.10
+- pytorch 2.3
+- wandb
 
 ### Installation
-
+Install the required packages
 ```py
-# Something would show up in the sooner future...
+pip install -r requirements.txt
 ```
-
+Install the YOLOv8 package from Ultralytics
+```py
+pip install ultralytics
+```
 <!--
 1. Get a free API Key at [https://example.com](https://example.com)
 2. Clone the repo
@@ -122,29 +101,44 @@ The goal of this project is to develop and implement a <b>real-time road damage 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-```py
-# Something would show up in the sooner future...
-```
+To use this project, follow the steps below:
+
+1. Prepare the dataset by filtering and converting it to the YOLO format.
+2. Train the YOLOv8 model using the prepared dataset.
+3. Run inference using the trained model.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- ML usecase 1: Road Damage Detection -->
+## ML usecase1: Road Damage Detection
+### Dataset
+The model is trained on the RDD2022 dataset. You can download the dataset from the official RDD2022 repository.
+### Dataset Links
 
-
-<!-- ROADMAP 
-## Roadmap
-
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
--->
+- [GitHub Repository for Road Damage Detection Dataset](https://github.com/sekilab/RoadDamageDetector)
+- [Japan Dataset](https://bigdatacup.s3.ap-northeast-1.amazonaws.com/2022/CRDDC2022/RDD2022/Country_Specific_Data_CRDDC2022/RDD2022_Japan.zip)
+- [Filtered Japan Dataset (D00, D10, D20, D40 labels only)](https://stuconestogacon-my.sharepoint.com/:u:/g/personal/hyoon6442_conestogac_on_ca/ETxbhuMBQX5OhqSsITEUUYgBcrU2wipogzRVdDbYcjgI5Q?e=SfISCj)
+### Data Preparation
+1. Filter the dataset to include only specific labels(D00, D10, D20, D40) using the provided 'filter_dataset.py' script.
+   ```py
+   python filter_dataset.py
+   ```
+2. Convert the filtered RDD2022 dataset to the YOLO format using the provided 'yolo_data_converter.py' script. This script will also split the dataset into training and validation sets.
+   ```py
+   python yolo_data_converter.py
+   ```
+### Model Training and Inference
+To train the YOLOv8 model on the RDD2022 dataset, use the 'train.py' script.
+For inference, use the 'predict.py' script with the best saved model.
+You can download the pretrained model from [here](https://stuconestogacon-my.sharepoint.com/:u:/g/personal/hyoon6442_conestogac_on_ca/EdYBEnPzaBVOjvr-FyZkqwEBUoGGf6L6TNdbIswAKV0sRw?e=H1T9gL)
+1. Training the model: The results will be saved in the './runs/detect/train/' directory.
+   ```py
+   python train.py
+   ```
+2. Running Inference:
+   ```py
+   python predict.py
+   ```
 
 
 <!-- CONTRIBUTING -->
@@ -197,9 +191,3 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Acknowledgments
 
 Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Python](python.org)
-* [TensorFlow](https://www.tensorflow.org/)
-* [Object detection](https://en.wikipedia.org/wiki/Object_detection)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
