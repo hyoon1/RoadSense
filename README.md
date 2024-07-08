@@ -140,6 +140,23 @@ You can download the pretrained model from [here](https://stuconestogacon-my.sha
    python predict.py
    ```
 
+### Docker
+The Dockerfile is located in the root of the folder. The main purpose of Docker is to run the Streamlit app in a container. The Python file for the Streamlit app is located at `./streamlit/app.py`. The Docker configuration files are located in the `./docker/` directory, including the Python requirements file (requirements.txt).
+
+1. Bulding a Docker image:
+   ```
+   docker build -t image_name:tag_id 
+   ```
+2. Check Dockder images:
+   ```
+   docker images
+   ```
+3. Running Docker container:
+   ```
+   docker run -p 80:80 image_name:tag_id
+
+Dockerhub repository name: [king138786/roadsense](https://hub.docker.com/r/king138786/roadsense)
+
 
 <!-- CONTRIBUTING -->
 ## Contributing
