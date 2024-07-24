@@ -7,3 +7,5 @@ torch
 torchvision
 Ultralytics
 timm
+imageio
+folium

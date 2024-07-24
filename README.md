@@ -145,7 +145,7 @@ The Dockerfile is located in the root of the folder. The main purpose of Docker 
 
 1. Bulding a Docker image:
    ```
-   docker build -t image_name:tag_id 
+   docker build -t roadsense:tag_id .
    ```
 2. Check Dockder images:
    ```
@@ -153,7 +153,7 @@ The Dockerfile is located in the root of the folder. The main purpose of Docker 
    ```
 3. Running Docker container:
    ```
-   docker run -p 80:80 image_name:tag_id
+   docker run -p 8501:8501 roadsense:tag_id
 
 Dockerhub repository name: [king138786/roadsense](https://hub.docker.com/r/king138786/roadsense)
 

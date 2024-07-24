@@ -11,6 +11,7 @@ import streamlit as st
 from PIL import Image
 from ultralytics import YOLO
 from utils.inference import process_frame
+from roadsense_frontend.map import create_map
 
 ###Initial UI configuration:###
 st.set_page_config(page_title="RoadSense Streamlit", page_icon="🛣️", layout="wide")
@@ -23,15 +24,21 @@ headers = {"Content-Type": "application/json"}
 # 43.373572, -80.479572
 # 43.452845, -80.399314
 
-def create_data(result, severity=None):
+
+def create_data(result, location={}, severity=None):
     update_url = "http://localhost:5000/roadcondition/update"
+    
+    # For docker environment
+    # update_url = "http://host.docker.internal:5000/roadcondition/update"
+    
+    
     js = json.loads(result.tojson())
     for item in js:
         severity = item["class"] if severity is None else severity
         update_payload = {
             "APIKey": token,
-            "longitude": round(random.uniform(-80.576864, -80.423523), 6),
-            "latitude": round(random.uniform(43.397781, 43.494617), 6),
+            "longitude": location["lg"],
+            "latitude": location["lat"],
             "damage_type": item["name"],
             "severity": severity,
         }
@@ -140,6 +147,11 @@ def render_app():
 
     if uploaded_file:
 
+        lg = round(random.uniform(-80.576864, -80.423523), 6)
+        lat = round(random.uniform(43.397781, 43.494617), 6)
+
+        location = {"lg": lg, "lat": lat}
+
         if "mp4" in uploaded_file.type:
             tfile = tempfile.NamedTemporaryFile(delete=False)
             tfile.write(uploaded_file.read())
@@ -149,30 +161,35 @@ def render_app():
 
             frame_count = 0
             frames = []
+
+            placeholder = st.empty()
+
             while cap.isOpened():
                 ret, frame = cap.read()
                 if not ret or frame_count == 50:
                     break
 
-                processed_frame, result, severity = process_frame(frame)
-                create_data(result, severity)
+                model = YOLO("./models/yolov8n_best.pt")
+                processed_frame, result, severity = process_frame(frame, model)
+                create_data(result, location, severity)
 
                 # for generating gif
                 rgb_frame = cv2.cvtColor(processed_frame, cv2.COLOR_BGR2RGB)
                 frames.append(rgb_frame)
+
+                imageio.mimsave("./detection.gif", frames, loop=10000, duration=100)
+                base64 = getbase64()
+                placeholder.markdown(
+                    f'<img src="data:image/gif;base64,{base64}" alt="cat gif">',
+                    unsafe_allow_html=True,
+                )
 
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     break
 
                 frame_count += 1
 
-            imageio.mimsave("./detection.gif", frames, loop=10000, duration=100)
-
-            base64 = getbase64()
-            st.markdown(
-                f'<img src="data:image/gif;base64,{base64}" alt="cat gif">',
-                unsafe_allow_html=True,
-            )
+                create_map()
 
             cap.release()
             cv2.destroyAllWindows()
@@ -187,7 +204,7 @@ def render_app():
                     result = model.predict(source=image, conf=0.35, iou=0.5)[0]
                     img = result.save()
                     st.image(img, caption="Result Image", use_column_width=True)
-                    create_data(result, None)
+                    create_data(result, location, None)
 
 
 render_app()

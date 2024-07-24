@@ -57,7 +57,7 @@ vit_model.load_state_dict(
 vit_model.to(device).half().eval()
 
 # Load models
-yolo_model = YOLO("./models/yolov8n_best.pt").to(device).half()
+
 # vit_model = torch.jit.script(vit_model).to(device).half().eval()
 
 # Define the transformation pipeline
@@ -71,10 +71,11 @@ transform = transforms.Compose(
 )
 
 
-def process_frame(frame):
+def process_frame(frame, model):
     # Perform YOLO inference
+    # yolo_model = YOLO("./models/yolov8n_best.pt").to(device).half()
     with autocast():
-        results = yolo_model.track(frame, persist=True, half=True)  # Enable tracking
+        results = model.track(frame, persist=True, half=True)  # Enable tracking
 
     # Visualize the results on the frame
     annotated_frame = results[0].plot()
