@@ -1,15 +1,17 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-
+CORS(app, support_credentials=True)
 APIKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
 
 # Sample data representing road conditions
-road_conditions_data = {}
+road_conditions_data = []
 
 
 @app.route("/auth/getAPIKey", methods=["POST"])
+@cross_origin(supports_credentials=True)
 def get_api_key():
     data = request.get_json()
     account = data.get("account")
@@ -29,6 +31,7 @@ def get_api_key():
 
 
 @app.route("/model/ml_usecase_2/train", methods=["GET"])
+@cross_origin(supports_credentials=True)
 def get_road_conditions():
     APIKey_ = request.args.get("APIKey")
     if APIKey_ == APIKey:
@@ -43,10 +46,11 @@ def get_road_conditions():
 
 
 @app.route("/roadcondition/update", methods=["POST"])
+@cross_origin(supports_credentials=True)
 def update_road_condition():
     data = request.get_json()
     APIKey_ = data.get("APIKey")
-    lon = data.get("longtitude")
+    lon = data.get("longitude")
     lat = data.get("latitude")
     damage_type = data.get("damage_type")
     severity = data.get("severity")
@@ -55,13 +59,16 @@ def update_road_condition():
 
         id = f'wtl_{str(datetime.today().strftime("%Y%m%d%H%M%S"))}'
 
-        road_conditions_data[id] = {
-            "longtitude": lon,
-            "latitude": lat,
-            "damage_type": damage_type,
-            "severity": severity,
-            "reported_at": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
-        }
+        road_conditions_data.append(
+            {
+                "id": id,
+                "longitude": lon,
+                "latitude": lat,
+                "damage_type": damage_type,
+                "severity": severity,
+                "reported_at": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
+            }
+        )
 
         return (
             jsonify(
@@ -81,6 +88,7 @@ def update_road_condition():
 
 
 @app.route("/roadcondition/notifications", methods=["GET"])
+@cross_origin(supports_credentials=True)
 def road_condition_notification():
     APIKey_ = request.args.get("APIKey")
 
@@ -94,6 +102,7 @@ def road_condition_notification():
 
 
 @app.route("/roadcondition/delete", methods=["DELETE"])
+@cross_origin(supports_credentials=True)
 def road_condition_delete():
 
     APIKey_ = request.args.get("APIKey")
@@ -110,6 +119,7 @@ def road_condition_delete():
 
 
 @app.route("/roadcondition/modify", methods=["PUT"])
+@cross_origin(supports_credentials=True)
 def road_condition_modify():
 
     data = request.get_json()
@@ -128,4 +138,4 @@ def road_condition_modify():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host="0.0.0.0", port=5000)

@@ -13,7 +13,7 @@ RUN pip install -r ./docker/requirements.txt
 RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 # This tells Docker to listen on port 80 at runtime. Port 80 is the standard port for HTTP.
-EXPOSE 80
+EXPOSE 8501
 
 # This command creates a .streamlit directory in the home directory of the container.
 RUN mkdir ~/.streamlit
