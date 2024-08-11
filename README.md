@@ -130,7 +130,11 @@ The model is trained on the RDD2022 dataset. You can download the dataset from t
 ### Model Training and Inference
 To train the YOLOv8 model on the RDD2022 dataset, use the 'train.py' script.
 For inference, use the 'predict.py' script with the best saved model.
-You can download the pretrained model from [here](https://stuconestogacon-my.sharepoint.com/:u:/g/personal/hyoon6442_conestogac_on_ca/EdYBEnPzaBVOjvr-FyZkqwEBUoGGf6L6TNdbIswAKV0sRw?e=H1T9gL)
+
+You can download the pretrained models from the links below:
+- **YOLOv8 Model (.pt)**: [Download YOLOv8 .pt model](https://stuconestogacon-my.sharepoint.com/:u:/g/personal/hyoon6442_conestogac_on_ca/ESVuF62OmXBHs6g-WHxlEAQBwbEY52ymRiN1iYyHKEVk6g?e=NkmJzx)  
+- **TFLite Model (.tflite)**: [Download TFLite .tflite model](https://stuconestogacon-my.sharepoint.com/:u:/g/personal/hyoon6442_conestogac_on_ca/Eb5bXqKWsLpClH_zlrHCUVYByzGubulB1bLantX3HchC3w?e=2Qjv94)
+
 1. Training the model: The results will be saved in the './runs/detect/train/' directory.
    ```py
    python train.py
